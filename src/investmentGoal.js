@@ -7,7 +7,6 @@ export function generateReturnsArray(
   timeHorizon = 0,
   timePeriod = "monthly",
   monthlyContribution = 0,
-  returnRate = 0,
   returnTimeFrame = "monthly"
 ) {
   if (!timeHorizon || !startingAmount) {
