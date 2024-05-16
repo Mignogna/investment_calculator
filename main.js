@@ -5,6 +5,8 @@ const finalMoneyChart = document.getElementById("final-money-distribution");
 const progressionChart = document.getElementById("progression");
 const form = document.getElementById("investment-form");
 const clearFormButton = document.getElementById("clear-form");
+let doughnutChartReference = {};
+let progressionChartReference = {};
 
 function formatCurrencyToGraph(value) {
   return value.toFixed(2);
@@ -15,7 +17,7 @@ function renderProgression(evt) {
   if (document.querySelector(".error")) {
     return;
   }
-  /* resetCharts();*/
+  resetCharts();
   const startingAmount = Number(
     document.getElementById("starting-amount").value.replace(",", ".")
   );
@@ -67,6 +69,56 @@ function renderProgression(evt) {
       ],
     },
   });
+
+  progressionChartReference = new Chart(progressionChart, {
+    type: "bar",
+    data: {
+      labels: returnsArray.map(
+        (finalInvestmentObject) => finalInvestmentObject.month
+      ),
+      datasets: [
+        {
+          label: "Total Investido",
+          data: returnsArray.map((finalInvestmentObject) =>
+            formatCurrencyToGraph(finalInvestmentObject.investedAmount)
+          ),
+          backgroundColor: "rgb(52,211,153)",
+        },
+        {
+          label: "Retorno do Investimento",
+          data: returnsArray.map((finalInvestmentObject) =>
+            formatCurrencyToGraph(finalInvestmentObject.interestReturns)
+          ),
+          backgroundColor: "rgb(5,160,118)",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true,
+        },
+        y: {
+          stacked: true,
+        },
+      },
+    },
+  });
+}
+
+function isObjectEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
+function resetCharts() {
+  if (
+    !isObjectEmpty(doughnutChartReference) &&
+    !isObjectEmpty(progressionChartReference)
+  ) {
+    doughnutChartReference.destroy();
+    progressionChartReference.destroy();
+  }
 }
 
 function clearForm() {
@@ -76,7 +128,7 @@ function clearForm() {
   form["return-rate"].value = "";
   form["tax-rate"].value = "";
 
-  /*resetCharts();*/
+  resetCharts();
 
   const errorInputContainers = document.querySelectorAll(".error");
   for (const errorInputContainer of errorInputContainers) {
