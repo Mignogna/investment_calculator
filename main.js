@@ -1,5 +1,6 @@
 import { generateReturnsArray } from "./src/investmentGoal.js";
 import { Chart } from "chart.js/auto";
+import { createTable } from "./src/table.js";
 
 const finalMoneyChart = document.getElementById("final-money-distribution");
 const progressionChart = document.getElementById("progression");
@@ -7,6 +8,34 @@ const form = document.getElementById("investment-form");
 const clearFormButton = document.getElementById("clear-form");
 let doughnutChartReference = {};
 let progressionChartReference = {};
+
+const columnsArray = [
+  {
+    columnLabel: "Total investido",
+    accessor: "investedAmount",
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
+  },
+  {
+    columnLabel: "Rendimento mensal",
+    accessor: "interestReturns",
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
+  },
+  {
+    columnLabel: "Rendimento total",
+    accessor: "totalInterestReturns",
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
+  },
+  { columnLabel: "Mês", accessor: "month" },
+  {
+    columnLabel: "Quantia total",
+    accessor: "totalAmount",
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
+  },
+];
+
+function formatCurrencyToTable(value) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
 
 function formatCurrencyToGraph(value) {
   return value.toFixed(2);
@@ -42,7 +71,7 @@ function renderProgression(evt) {
     returnRatePeriod
   );
 
-  const finalInvestmentObject = returnsArray[returnsArray.length - 1];
+  /*const finalInvestmentObject = returnsArray[returnsArray.length - 1];
 
   doughnutChartReference = new Chart(finalMoneyChart, {
     type: "doughnut",
@@ -104,7 +133,8 @@ function renderProgression(evt) {
         },
       },
     },
-  });
+  });*/
+  createTable(columnsArray, returnsArray, "results-table");
 }
 
 function isObjectEmpty(obj) {
@@ -172,5 +202,5 @@ for (const formElement of form) {
   }
 }
 
-/*form.addEventListener("submit", renderProgression);*/
+form.addEventListener("submit", renderProgression);
 clearFormButton.addEventListener("click", clearForm);
