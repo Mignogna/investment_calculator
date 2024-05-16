@@ -71,7 +71,7 @@ function renderProgression(evt) {
     returnRatePeriod
   );
 
-  /*const finalInvestmentObject = returnsArray[returnsArray.length - 1];
+  const finalInvestmentObject = returnsArray[returnsArray.length - 1];
 
   doughnutChartReference = new Chart(finalMoneyChart, {
     type: "doughnut",
@@ -133,7 +133,7 @@ function renderProgression(evt) {
         },
       },
     },
-  });*/
+  });
   createTable(columnsArray, returnsArray, "results-table");
 }
 
